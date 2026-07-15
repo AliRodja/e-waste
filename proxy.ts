@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 
 const roleByPrefix: Record<string, string> = {
   "/dashboard": "USER",
+  "/pickups": "USER",
   "/mitra": "MITRA",
   "/admin": "ADMIN",
 };
@@ -26,5 +27,5 @@ export default auth(function proxy(req) {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/mitra/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/pickups/:path*", "/mitra/:path*", "/admin/:path*"],
 };

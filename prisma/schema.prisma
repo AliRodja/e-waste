@@ -27,4 +27,56 @@ model User {
   poin      Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  pickups       Pickup[]
+  verifications Verification[] @relation("MitraVerifications")
+}
+
+enum PickupCategory {
+  HP_LAPTOP
+  BATERAI
+  KABEL
+  PERALATAN_RUMAH_TANGGA
+  LAINNYA
+}
+
+enum PickupStatus {
+  DIAJUKAN
+  DIPROSES
+  DIJEMPUT
+  SELESAI
+}
+
+model Pickup {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id])
+  kategori   PickupCategory
+  deskripsi  String
+  fotoUrl    String
+  alamat     String
+  status     PickupStatus   @default(DIAJUKAN)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  verification Verification?
+}
+
+enum ItemCondition {
+  BAIK
+  RUSAK_RINGAN
+  RUSAK_BERAT
+}
+
+model Verification {
+  id             String         @id @default(cuid())
+  pickupId       String         @unique
+  pickup         Pickup         @relation(fields: [pickupId], references: [id])
+  mitraId        String
+  mitra          User           @relation("MitraVerifications", fields: [mitraId], references: [id])
+  jumlah         Float
+  kondisi        ItemCondition
+  fotoBuktiUrl   String
+  poinDihasilkan Int
+  createdAt      DateTime       @default(now())
 }
