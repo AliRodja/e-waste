@@ -30,6 +30,7 @@ model User {
 
   pickups       Pickup[]
   verifications Verification[] @relation("MitraVerifications")
+  redemptions   Redemption[]
 }
 
 enum PickupCategory {
@@ -79,4 +80,32 @@ model Verification {
   fotoBuktiUrl   String
   poinDihasilkan Int
   createdAt      DateTime       @default(now())
+}
+
+model Reward {
+  id             String   @id @default(cuid())
+  nama           String
+  deskripsi      String
+  poinDibutuhkan Int
+  stok           Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  redemptions Redemption[]
+}
+
+enum RedemptionStatus {
+  DIPROSES
+  SELESAI
+}
+
+model Redemption {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  rewardId    String
+  reward      Reward           @relation(fields: [rewardId], references: [id])
+  poinDipakai Int
+  status      RedemptionStatus @default(DIPROSES)
+  createdAt   DateTime         @default(now())
 }
